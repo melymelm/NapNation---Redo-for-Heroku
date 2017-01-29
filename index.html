@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
+	<title>NapNation</title>
+
+	<!-- Bootstrap Core CSS -->
+
+	<link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat|Rubik" rel="stylesheet">
+    <link rel="stylesheet" href="https://bootswatch.com/slate/bootstrap.min.css">
+
+    <link rel="stylesheet" href="assets/css/materialize.min.css">
+  	<link rel="stylesheet" href="assets/css/reset.css">
+  	<link rel="stylesheet" href="assets/css/style.css">
+
+  	<script src="http://www.w3schools.com/appml/2.0.3/appml.js"></script>
+  	
+
+  	<script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+	<!-- <script src="assets/js/moment.js"></script> -->
+  	<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+	<script src="assets/js/week8.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0FH_7QiSLiwrknyXw3IBL35oEUPJ1tX8&libraries=places&callback=initAutocomplete" defer></script>
+
+  	
+</head>
+<body>
+
+<!-- Header  -->
+	<div class="jumbotron" id="header">
+	  <h1>Nap <img src="assets/images/sleep.png" alt="" class="circle responsive-img"> Nation</h1>
+	  <h2><p>When you just need a power nap, but don't have time to go home.</p></h2>
+	</div>
+
+
+	<div class="container-fluid">
+
+
+	<!-- text blurb -->
+
+
+	
+
+		<div class="row">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+				<div class="panel panel-default">
+					  <div class="panel-body" id="startText">
+					    <div class="background">
+  							<div class="transbox">
+    							<p>Want to find a napping place near where you are right at this moment? Fill in the address in the box below, and we'll show you some places nearby!</p>
+  							</div>
+						</div>
+					  </div>
+				</div>
+			</div>
+		</div> <!-- end of div class="row" -->
+			
+			<!-- map goes here -->
+			<div class="row">
+				<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+	    			<div id="map"></div>
+	    	
+
+				</div> <!-- end of div class="row" -->
+	
+
+
+
+	<!-- field where latest results are shown populated from form -->
+		<div class="row" id="resultTable">
+			<div class="col-sm-12">
+				<table class="table table-striped table-hover ">
+				
+				  <thead>
+				  <caption><h3>Favorite Places to Nap:</h3></caption>
+				    <tr class="success">
+				      <th>Name</th>
+				      <th>Location</th>
+				      <th>Rating</th>
+				      <th>Comments</th>
+				    </tr>
+				  </thead>
+				  <tbody id="places">
+				    <tr>
+				      <td>Friday Center</td>
+				      <td>100 Friday Center Drive, Chapel Hill, NC 27517</td>
+				      <td>5</td>
+				      <td>Comfortable chairs, lots of different places to get away from people</td>
+				    </tr>
+				    <tr>
+				    	<td>UNC Student Union</td>
+				    	<td>3103 South Rd, Chapel Hill, NC 27599</td>
+				    	<td>5</td>
+				    	<td>Downstairs has the best nap spots</td>
+				    </tr>
+				    <tr>
+				    	<td>Polk Place</td>
+				    	<td>University of North Carolina, Chapel Hill, NC 27599</td>
+				    	<td>5</td>
+				    	<td>Outdoor park area with benches and a racist statue</td>
+				    </tr>
+				    <tr>
+				    	<td>Coker Arboretum</td>
+				    	<td>399 E Cameron Ave, Chapel Hill, NC 27514</td>
+				    	<td>4</td>
+				    	<td>Benches, cool flora, chipmunks can be used as a pillow at your own risk</td>
+				    </tr>
+				    
+				  </tbody>
+				</table> 
+			</div>
+		</div>
+
+	<!-- adding new addresses/rating -->
+		<div class="row">
+			<div class="col-lg-5 col-md-5 col-sm-5 col-xs-4" id="formInput">
+
+			<div class="panel panel-primary">
+  				<div class="panel-heading">
+    			<h3 class="panel-title">Add your favorite nap place</h3>
+  				</div>
+
+  				<div class="panel-body">
+
+
+			<form>
+				<div class="form-group">
+    				<label for="formGroupExampleInput">Name of Napping Place:</label>
+    				<input type="text" class="form-control" id="inputName" placeholder="Name of place to nap">
+  				</div>
+
+  				<div class="form-group">
+    				<label for="formGroupExampleInput">Address of Napping Place:</label>
+    				<input type="text" class="form-control" id="inputAddress" placeholder="Street, State, Zip Code">
+  				</div>
+  				<div class="form-group">
+    				<label for="formGroupExampleInput2">Your email:</label>
+	    				<input type="text" class="form-control" id="inputEmail" placeholder="Your email">
+    			<!-- <form>
+						 <input type="email" placeholder="me@example.com">
+						 <input type="submit">
+					</form> -->
+  				</div>
+				
+  					
+
+  				<div class="form-group">
+  					<label for="comment">Comments:</label>
+  					<textarea class="form-control" rows="3" id="inputComment" placeholder="Add comments about your experience"></textarea>
+				</div>
+
+  				<!-- add comment field to populate -->
+
+  				<br>
+				<div class="form-group">
+					    	<span class="help-block"><p>On a scale of 1 to 5, with 1 being not very safe and 5 being safe, how would you rate this space?</p></span>
+					      <label for="select" class="col-lg-2 control-label">Rate</label>
+					      <div class="col-lg-10">
+					        <select class="form-control" id="inputRating">
+					          <option>1</option>
+					          <option>2</option>
+					          <option>3</option>
+					          <option>4</option>
+					          <option>5</option>
+					        </select>
+					        
+					      </div> <!-- div class="col-lg-10" -->
+				</div> <!-- end of div class="form-group"-->
+
+
+					    
+				
+				<div class="form-group">
+					<div>
+					    <button type="submit" class="btn btn-primary" id="addNap">Submit</button>
+					</div>
+				</div> <!-- div class="form-group" -->
+				
+			</form>
+				</div> <!-- div class="panel-body" -->
+
+  				</div> <!-- div class="panel panel-primary" -->
+			</div> <!-- div class="col-sm-5 col-xs-4" id="formInput" -->
+
+		</form>
+
+
+
+		<!-- music will go here -->
+		
+			<div class="col-lg-5 col-md-5 col-sm-4 col-xs-4" id="musicInput">
+
+			<div class="panel panel-primary">
+  				<div class="panel-heading">
+    			<h3 class="panel-title">Music <span class="glyphicon glyphicon-music"></span></h3>
+  				</div>	
+
+			<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->	
+  			<!-- work on this later: need a submit button, need to figure out form better so it looks like other one -->
+
+			<form>
+				<div class="form-group">
+
+				<!-- Spotify Player Goes Here -->
+  				<div id="player-div"></div>
+
+
+  				<form id="artist-form">
+				   <!-- Label for Text Box -->
+				   <label for="artist-input">Choose Your Artist</label>
+
+				   <!-- Text Input Box -->
+				   <input type="text" id="artist-input" placeholder="Type in an artist here"><br>
+
+				   <!-- Submit Button -->
+				   <input type="submit" class="btn btn-primary" id="select-artist" value="Search Music">
+				</form>
+
+			</form>
+
+			<!-- end of needs work section -->
+			<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+	  				</div> <!-- end of div class="panel-body" id="player-div"-- >
+			</div> <!-- div class="panel panel-primary" -- >
+
+			</div> <!-- div class="col-sm-5 col-xs-4" id="musicInput" -- >
+		</form>
+		</div> <!-- end of div class="row" -->
+
+
+	</div>   <!-- end of container -- >
+
+	<!-- footer -->
+
+
+  <div class="wrapper">
+
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	
+		<div class="creators">
+			<h1>The Creators of Nap Nation</h1>
+
+		</div>
+
+			<table appml-data="dataObj">
+			  <tr>
+			    <th><b>Co-Creator</b></th>
+			    <th><b>Home State</b></th>
+			    <th><b>Favorite Nap Spot</b></th>
+			  </tr>
+			  <tr appml-repeat="records">
+			    <td>{{Co-Creator}}</td>
+			    <td>{{Home State}}</td>
+			    <td>{{Favorite Nap Spot}}</td>
+			  </tr>
+			</table>
+
+	<footer class="#263238 blue-grey darken-4">
+	          
+	          <div class="footer-copyright">
+	            <div class="container">
+	            © 2017 Nap Nation
+	            
+	            </div>
+
+	 	</div>
+	 </div>
+	</div>
+</footer>
+
+
+
+
+
+
+	
+
+	
+</body>
+</html>
+
